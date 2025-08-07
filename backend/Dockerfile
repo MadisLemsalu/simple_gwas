@@ -4,19 +4,21 @@ FROM python:3.9-slim
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy the requirements file into the container at /app
-COPY ./requirements.txt /app/requirements.txt
+# Copy the requirements file first to leverage Docker cache
+COPY ./backend/requirements.txt /app/requirements.txt
 
-# Install any needed packages specified in requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
+# Install dependencies
+RUN pip install --no-cache-dir -r /app/requirements.txt
 
-# Copy the backend and process_gwas directories into the container
+# Copy the rest of the application code
 COPY ./backend /app/backend
 COPY ./process_gwas /app/process_gwas
 
-# Set the python path to include the root directory
+# Set the python path to include the root directory so modules can be found
 ENV PYTHONPATH="/app"
 
-# Run the app. The --host 0.0.0.0 makes the app accessible from outside the container
-CMD ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Expose the port the app runs on
+EXPOSE 8000
 
+# Run the app
+CMD ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8000"]
