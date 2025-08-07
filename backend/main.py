@@ -15,11 +15,20 @@ from process_gwas.process_gwas import standardize_header
 
 app = FastAPI()
 
+@app.get("/")
+def read_root():
+    return {"status": "ok"}
+
 # Allow all origins for simplicity, especially for deployment.
 # For production, you might want to restrict this to your frontend's domain.
+origins = [
+    "http://localhost:3000",
+    "https://simplegwas-production.up.railway.app", # Replace with your deployed frontend URL if different
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
