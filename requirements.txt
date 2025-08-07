@@ -3,5 +3,4 @@ uvicorn
 python-multipart
 pandas
 numpy
-fuzzywuzzy
-python-levenshtein
+thefuzz[speedup]
