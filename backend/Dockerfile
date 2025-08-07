@@ -4,13 +4,13 @@ FROM python:3.9-slim
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy the requirements file first to leverage Docker cache
-COPY ./backend/requirements.txt /app/requirements.txt
+# Copy the requirements file from the root into the container
+COPY requirements.txt /app/
 
 # Install dependencies
 RUN pip install --no-cache-dir -r /app/requirements.txt
 
-# Copy the rest of the application code
+# Copy the application code from the backend and process_gwas directories
 COPY ./backend /app/backend
 COPY ./process_gwas /app/process_gwas
 
